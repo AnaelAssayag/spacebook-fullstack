@@ -1,10 +1,25 @@
-var SpacebookApp = function() {
 
+var SpacebookApp = function () {
   var posts = [];
 
   var $posts = $(".posts");
 
   _renderPosts();
+
+  var fetch = function () {
+    $.ajax({
+        method: "GET",
+        url: "/posts",
+        success: function (data) {
+          posts = data
+          _renderPosts();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        }
+    });
+};
+
 
   function _renderPosts() {
     $posts.empty();
@@ -36,18 +51,18 @@ var SpacebookApp = function() {
     }
   }
 
-  var removePost = function(index) {
+  var removePost = function (index) {
     posts.splice(index, 1);
     _renderPosts();
   };
 
-  var addComment = function(newComment, postIndex) {
+  var addComment = function (newComment, postIndex) {
     posts[postIndex].comments.push(newComment);
     _renderComments(postIndex);
   };
 
 
-  var deleteComment = function(postIndex, commentIndex) {
+  var deleteComment = function (postIndex, commentIndex) {
     posts[postIndex].comments.splice(commentIndex, 1);
     _renderComments(postIndex);
   };
@@ -57,13 +72,15 @@ var SpacebookApp = function() {
     removePost: removePost,
     addComment: addComment,
     deleteComment: deleteComment,
+    fetch:fetch
   };
 };
 
 var app = SpacebookApp();
+app.fetch()
 
 
-$('#addpost').on('click', function() {
+$('#addpost').on('click', function () {
   var $input = $("#postText");
   if ($input.val() === "") {
     alert("Please enter text!");
@@ -75,17 +92,17 @@ $('#addpost').on('click', function() {
 
 var $posts = $(".posts");
 
-$posts.on('click', '.remove-post', function() {
+$posts.on('click', '.remove-post', function () {
   var index = $(this).closest('.post').index();;
   app.removePost(index);
 });
 
-$posts.on('click', '.toggle-comments', function() {
+$posts.on('click', '.toggle-comments', function () {
   var $clickedPost = $(this).closest('.post');
   $clickedPost.find('.comments-container').toggleClass('show');
 });
 
-$posts.on('click', '.add-comment', function() {
+$posts.on('click', '.add-comment', function () {
 
   var $comment = $(this).siblings('.comment');
   var $user = $(this).siblings('.name');
@@ -105,7 +122,7 @@ $posts.on('click', '.add-comment', function() {
 
 });
 
-$posts.on('click', '.remove-comment', function() {
+$posts.on('click', '.remove-comment', function () {
   var $commentsList = $(this).closest('.post').find('.comments-list');
   var postIndex = $(this).closest('.post').index();
   var commentIndex = $(this).closest('.comment').index();
