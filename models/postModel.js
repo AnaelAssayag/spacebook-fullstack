@@ -18,13 +18,13 @@ var Post = mongoose.model('post', postSchema)
 
 var ana = new Post({
     text:"hi",
-    comments:[]
+    comments:[{text:"ok", user:"op"}]
 })
 var bob = new Post({
     text:"ok",
-    comments:[]
+    comments:[{text:"ok", user:"bob"}]
 })
-bob.save(callbackfn);
+// bob.save(callbackfn);
 
 function callbackfn(err,data) {
     if(err) throw err;

@@ -19,6 +19,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // These will define your API:
 
 // 1) to handle getting all posts and their comments
+app.get('/posts', function (req, res) {
+  Post.find(function(err, result) {
+    if (err) {
+      console.error(err);
+    }else {
+      res.send(result)
+    }
+  });
+});
 // 2) to handle adding a post
 // 3) to handle deleting a post
 // 4) to handle adding a comment to a post
