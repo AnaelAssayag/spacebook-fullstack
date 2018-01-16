@@ -16,14 +16,14 @@ var postSchema = new mongoose.Schema({
 
 var Post = mongoose.model('post', postSchema)
 
-var ana = new Post({
-    text:"hi",
-    comments:[{text:"ok", user:"op"}]
-})
-var bob = new Post({
-    text:"ok",
-    comments:[{text:"ok", user:"bob"}]
-})
+// var ana = new Post({
+//     text:"hi",
+//     comments:[{text:"ok", user:"op"}]
+// })
+// var bob = new Post({
+//     text:"ok",
+//     comments:[{text:"ok", user:"bob"}]
+// })
 // bob.save(callbackfn);
 
 function callbackfn(err,data) {

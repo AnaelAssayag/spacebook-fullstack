@@ -33,10 +33,24 @@ var SpacebookApp = function () {
     }
   }
 
-  function addPost(newPost) {
-    posts.push({ text: newPost, comments: [] });
-    _renderPosts();
+  function addPost(newPost) { 
+    $.ajax({
+      type: "POST",
+      url: "/posts",
+      data: { text: newPost, comments: [] },
+      success: function(data){
+        // console.log(data)
+        posts.push(data);
+        _renderPosts();
+      },
+      error: function (err) {
+
+      }
+    });
+
+  
   }
+
 
 
   function _renderComments(postIndex) {
@@ -51,9 +65,25 @@ var SpacebookApp = function () {
     }
   }
 
-  var removePost = function (index) {
-    posts.splice(index, 1);
-    _renderPosts();
+  var removePost = function (index, postId) {
+    console.log(postId)
+    $.ajax({
+      method: "delete", 
+      url: "/posts/" + postId, 
+      data: {id:postId},
+      success: function(data){
+        posts.splice(index, 1);
+        _renderPosts();
+        // alert("Your post have successfully been deleted")
+
+
+      },
+      error: function (err) {
+
+      }
+    });
+  
+    
   };
 
   var addComment = function (newComment, postIndex) {
@@ -93,8 +123,9 @@ $('#addpost').on('click', function () {
 var $posts = $(".posts");
 
 $posts.on('click', '.remove-post', function () {
+  var postId = $(this).data().id;
   var index = $(this).closest('.post').index();;
-  app.removePost(index);
+  app.removePost(index, postId);
 });
 
 $posts.on('click', '.toggle-comments', function () {
