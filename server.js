@@ -1,3 +1,5 @@
+// import { read } from 'fs';
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -28,8 +30,38 @@ app.get('/posts', function (req, res) {
     }
   });
 });
+
 // 2) to handle adding a post
+app.post('/posts', function (req, res) {
+  var newPost = new Post(req.body);
+  newPost.save(function (err, post) {
+    if (err){
+      throw err
+    }else{
+      res.send(post)
+    }
+
+})
+})
 // 3) to handle deleting a post
+app.delete('/posts/:id', function (req, res) {
+  console.log(req.params.id)
+
+  Post.findByIdAndRemove(req.params.id, function(err, data){
+    if (err) {
+      throw err;
+        }
+    else {
+      res.send(data) 
+    }
+      })
+    });
+
+
+
+    
+
+
 // 4) to handle adding a comment to a post
 // 5) to handle deleting a comment from a post
 
