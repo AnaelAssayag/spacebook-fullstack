@@ -86,9 +86,21 @@ var SpacebookApp = function () {
     
   };
 
-  var addComment = function (newComment, postIndex) {
-    posts[postIndex].comments.push(newComment);
-    _renderComments(postIndex);
+  var addComment = function (newComment, postIndex,postId) {
+    console.log(postId)
+    $.ajax({
+      type: "POST",
+      url: "/posts/" + postId + "/comments",
+      data: newComment ,
+      success: function(data){
+        console.log(data)
+        posts[postIndex].comments = data.comments;
+        _renderComments(postIndex);
+      },
+      error: function (err) {
+        //add error
+      }
+    });
   };
 
 
@@ -134,7 +146,8 @@ $posts.on('click', '.toggle-comments', function () {
 });
 
 $posts.on('click', '.add-comment', function () {
-
+  var postId = $(this).closest('.post').find('.remove-post').data().id;
+  console.log(postId)
   var $comment = $(this).siblings('.comment');
   var $user = $(this).siblings('.name');
 
@@ -146,7 +159,7 @@ $posts.on('click', '.add-comment', function () {
   var postIndex = $(this).closest('.post').index();
   var newComment = { text: $comment.val(), user: $user.val() };
 
-  app.addComment(newComment, postIndex);
+  app.addComment(newComment, postIndex, postId);
 
   $comment.val("");
   $user.val("");

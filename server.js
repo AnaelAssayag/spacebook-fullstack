@@ -33,6 +33,8 @@ app.get('/posts', function (req, res) {
 
 // 2) to handle adding a post
 app.post('/posts', function (req, res) {
+  console.log(req.body)
+
   var newPost = new Post(req.body);
   newPost.save(function (err, post) {
     if (err){
@@ -46,7 +48,6 @@ app.post('/posts', function (req, res) {
 // 3) to handle deleting a post
 app.delete('/posts/:id', function (req, res) {
   console.log(req.params.id)
-
   Post.findByIdAndRemove(req.params.id, function(err, data){
     if (err) {
       throw err;
@@ -56,13 +57,38 @@ app.delete('/posts/:id', function (req, res) {
     }
       })
     });
-
-
-
-    
-
-
+   
 // 4) to handle adding a comment to a post
+app.post('/posts/:id/comments', function (req, res) {
+  var postId = req.params.id;
+  var newComment = req.body
+  Post.findByIdAndUpdate(postId, {$push: {comments: newComment}}, {new:true}, function(err,data){
+    if(err) {
+      throw err;
+    }
+    else {
+      console.log(data)
+      res.send(data)
+
+    }
+  })
+  // newPost.save(
+  //   Post.findById(req.body, function (err, data){
+  //     if(err) {
+  //       throw err;
+  //     }
+  //     else {
+  //       // res.push(data)
+  //       // res.send(data)
+
+  //     }
+  //   })
+  // )
+}); 
+
+
+
+
 // 5) to handle deleting a comment from a post
 
 app.listen(8000, function() {
