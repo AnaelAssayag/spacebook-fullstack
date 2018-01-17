@@ -72,24 +72,32 @@ app.post('/posts/:id/comments', function (req, res) {
 
     }
   })
-  // newPost.save(
-  //   Post.findById(req.body, function (err, data){
-  //     if(err) {
-  //       throw err;
-  //     }
-  //     else {
-  //       // res.push(data)
-  //       // res.send(data)
-
-  //     }
-  //   })
-  // )
 }); 
 
-
-
-
 // 5) to handle deleting a comment from a post
+app.delete('/posts/:id/comments/:idcomment', function (req, res) {
+//to retrieve a comment that has a specific _id from aPost
+var postId = req.params.id;
+var commentId = req.body.commentId;
+Post.findById(postId, function(err, data) {
+  console.log(data)
+  if(err) {
+    throw err;
+  }
+  else {
+    console.log(commentId)
+    data.comments.id(commentId).remove();
+    data.save();
+    res.send();
+
+}
+})
+})
+
+
+
+
+
 
 app.listen(8000, function() {
   console.log("what do you want from me! get me on 8000 ;-)");
